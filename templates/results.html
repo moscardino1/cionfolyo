@@ -27,7 +27,7 @@
         {% endfor %}
     </ul>
     <!-- <div id="portfolio-graph"></div> -->
-    <div id="portfolio-graph">{{ plot_json | safe }}</div>    
+    <div id="portfolio-graph">{{ plot_json | safe }}</div>
     <div id="hrp-pie"></div>
     <div id="min-cvar-pie"></div>
     <div id="min-var-pie"></div>
@@ -50,7 +50,18 @@
                 title: 'Returns'
             }
         };
-        Plotly.newPlot('portfolio-graph', [returnsData], layout);
+        // Add cumulative returns trace
+        var cumulativeReturnsData = {
+        x: {{ portfolio_returns_dates | tojson }},
+        y: {{ cumulative_returns | tojson }},
+        type: 'scatter',
+        mode: 'lines',
+        name: 'Cumulative Returns'
+    };
+// Update Plotly plot with both traces
+Plotly.newPlot('portfolio-graph', [returnsData, cumulativeReturnsData], layout);
+
+        
         Plotly.newPlot('hrp-pie', JSON.parse('{{ hrp_pie | safe }}'));
         Plotly.newPlot('min-cvar-pie', JSON.parse('{{ min_cvar_pie | safe }}'));
         Plotly.newPlot('min-var-pie', JSON.parse('{{ min_var_pie | safe }}'));

@@ -120,7 +120,7 @@ def results():
     fig.update_layout(title='Portfolio Returns Over Time', xaxis_title='Date', yaxis_title='Returns')
     cumulative_returns = (portfolio_returns_weighted + 1).cumprod() - 1
     # Convert the Plotly plot to JSON
-    # plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     cumulative_return_value = cumulative_return(portfolio_returns_weighted)
     hierarchical_risk_parity_weights = hierarchical_risk_parity(portfolio_returns)
     minimum_cvar_weights = minimum_cvar_portfolio(portfolio_returns)
@@ -163,10 +163,12 @@ def results():
                            portfolio_returns_dates=portfolio_returns_dates,
                            portfolio_returns_values=portfolio_returns_values,
                            additional_stats=additional_stats,
+                            cumulative_returns=cumulative_returns.tolist()  ,
                            hrp_pie=hrp_pie, 
                            min_cvar_pie=min_cvar_pie,
                            min_var_pie=min_var_pie, 
                            tangency_pie=tangency_pie
+
                            )
 
 

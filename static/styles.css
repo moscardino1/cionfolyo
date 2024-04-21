@@ -1,3 +1,4 @@
+/* styles.css */
 body {
     font-family: 'Helvetica Neue', sans-serif;
     background-color: #fafafa;
@@ -6,7 +7,7 @@ body {
 }
 
 .container {
-    max-width: 800px;
+    max-width: 1000px;  /* Adjust width as needed */
     margin: 0 auto;
     padding: 20px;
     background-color: #fff;
@@ -64,4 +65,21 @@ input[type="submit"]:hover {
 
 p {
     color: #2c3e50;
+}
+
+/* Pie Chart and Graph Styling */
+.charts-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; /* Distribute charts evenly */
+}
+
+.chart-wrapper {
+    width: 45%; /* Adjust width as needed */
+    margin-bottom: 20px;
+}
+
+#portfolio-graph {
+    width: 100%;  /* Make graph take full width */
+    height: 400px; /* Adjust height as needed */
 }

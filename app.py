@@ -4,11 +4,16 @@ import pandas as pd
 import plotly.graph_objs as go
 import plotly, json
 from scipy.optimize import minimize
+import plotly.express as px  # For creating pie charts
 
 import numpy as np
 app = Flask(__name__)
 
-
+def create_pie_chart(weights, title):
+    labels = weights.index
+    values = weights.values
+    fig = px.pie(values=values, names=labels, title=title)
+    return json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 def cumulative_return(portfolio_returns_weighted):
     return (portfolio_returns_weighted + 1).prod() - 1
 
@@ -113,14 +118,36 @@ def results():
     # Create a Plotly line chart
     fig = go.Figure(data=go.Scatter(x=portfolio_returns_dates, y=portfolio_returns_values, mode='lines+markers', name='Portfolio Returns'))
     fig.update_layout(title='Portfolio Returns Over Time', xaxis_title='Date', yaxis_title='Returns')
-
+    cumulative_returns = (portfolio_returns_weighted + 1).cumprod() - 1
     # Convert the Plotly plot to JSON
-    plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    # plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     cumulative_return_value = cumulative_return(portfolio_returns_weighted)
     hierarchical_risk_parity_weights = hierarchical_risk_parity(portfolio_returns)
     minimum_cvar_weights = minimum_cvar_portfolio(portfolio_returns)
     minimum_variance_weights = minimum_variance_portfolio(portfolio_returns)
     tangency_weights = tangency_portfolio(portfolio_returns)
+    hrp_pie = create_pie_chart(pd.Series(hierarchical_risk_parity_weights, index=tickers), "Hierarchical Risk Parity")
+    min_cvar_pie = create_pie_chart(pd.Series(minimum_cvar_weights, index=tickers), "Minimum CVaR")
+    min_var_pie = create_pie_chart(pd.Series(minimum_variance_weights, index=tickers), "Minimum Variance")
+    tangency_pie = create_pie_chart(pd.Series(tangency_weights, index=tickers), "Tangency Portfolio")
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=portfolio_returns_dates, y=portfolio_returns_values, mode='lines+markers', name='Portfolio Returns'))
+    fig.add_trace(go.Scatter(x=portfolio_returns_dates, y=cumulative_returns, mode='lines+markers', name='Cumulative Returns'))
+    fig.update_layout(title='Portfolio and Cumulative Returns Over Time', xaxis_title='Date', yaxis_title='Returns')
+
+
+    # Calculate cumulative returns
+    cumulative_returns = (portfolio_returns_weighted + 1).cumprod() - 1
+
+    # Add cumulative returns trace to the figure
+    fig.add_trace(go.Scatter(x=portfolio_returns_dates, y=cumulative_returns, mode='lines+markers', name='Cumulative Returns'))
+
+    # Update layout for y-axis range to accommodate cumulative returns
+    fig.update_layout(title='Portfolio and Cumulative Returns Over Time', xaxis_title='Date', yaxis_title='Returns', yaxis=dict(range=[min(portfolio_returns_values + cumulative_returns.tolist()), max(portfolio_returns_values + cumulative_returns.tolist())]))
+
+    # Convert the Plotly plot to JSON
+    plot_json = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+
 
     # Prepare data for displaying in the HTML template
     additional_stats = {
@@ -131,10 +158,16 @@ def results():
         'Tangency Portfolio Weights': tangency_weights
     }
 
-    return render_template('results.html', portfolio_stats=portfolio_stats,
+    return render_template('results.html', 
+                           portfolio_stats=portfolio_stats,
                            portfolio_returns_dates=portfolio_returns_dates,
                            portfolio_returns_values=portfolio_returns_values,
-                           additional_stats=additional_stats)
+                           additional_stats=additional_stats,
+                           hrp_pie=hrp_pie, 
+                           min_cvar_pie=min_cvar_pie,
+                           min_var_pie=min_var_pie, 
+                           tangency_pie=tangency_pie
+                           )
 
 
 if __name__ == '__main__':

@@ -26,9 +26,12 @@
             <li>{{ key }}: {{ value }}</li>
         {% endfor %}
     </ul>
-
-    <div id="portfolio-graph"></div> <!-- Placeholder for Plotly graph -->
-
+    <!-- <div id="portfolio-graph"></div> -->
+    <div id="portfolio-graph">{{ plot_json | safe }}</div>    
+    <div id="hrp-pie"></div>
+    <div id="min-cvar-pie"></div>
+    <div id="min-var-pie"></div>
+    <div id="tangency-pie"></div>
     <script>
         // JavaScript code to generate Plotly graph
         var returnsData = {
@@ -48,6 +51,12 @@
             }
         };
         Plotly.newPlot('portfolio-graph', [returnsData], layout);
+        Plotly.newPlot('hrp-pie', JSON.parse('{{ hrp_pie | safe }}'));
+        Plotly.newPlot('min-cvar-pie', JSON.parse('{{ min_cvar_pie | safe }}'));
+        Plotly.newPlot('min-var-pie', JSON.parse('{{ min_var_pie | safe }}'));
+        Plotly.newPlot('tangency-pie', JSON.parse('{{ tangency_pie | safe }}'));
+
+
     </script>
 </body>
 </html>

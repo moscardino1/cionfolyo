@@ -1,0 +1,17 @@
+python3.10 -m venv venv1
+source venv1/bin/activate 
+
+python3.10 -m venv venv
+source venv/bin/activate 
+deactivate 
+
+pip install....
+pip freeze > requirements.txt
+
+pip install -r requirements2.txt
+
+
+python app.py
+
+
+pip freeze > requirements1.txt

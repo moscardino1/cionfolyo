@@ -1,0 +1,53 @@
+<!-- results.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- Include Plotly JS -->
+</head>
+<body>
+    <h1>Portfolio Results</h1>
+    
+    {% if portfolio_stats %}
+        <h2>Portfolio Statistics:</h2>
+        <ul>
+            {% for key, value in portfolio_stats.items() %}
+                <li>{{ key }}: {{ value }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <h2>Additional Portfolio Statistics:</h2>
+    <ul>
+        {% for key, value in additional_stats.items() %}
+            <li>{{ key }}: {{ value }}</li>
+        {% endfor %}
+    </ul>
+
+    <div id="portfolio-graph"></div> <!-- Placeholder for Plotly graph -->
+
+    <script>
+        // JavaScript code to generate Plotly graph
+        var returnsData = {
+            x: {{ portfolio_returns_dates | tojson }},
+            y: {{ portfolio_returns_values | tojson }},
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Portfolio Returns'
+        };
+        var layout = {
+            title: 'Portfolio Returns',
+            xaxis: {
+                title: 'Date'
+            },
+            yaxis: {
+                title: 'Returns'
+            }
+        };
+        Plotly.newPlot('portfolio-graph', [returnsData], layout);
+    </script>
+</body>
+</html>

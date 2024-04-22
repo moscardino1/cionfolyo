@@ -134,12 +134,35 @@ def results():
     min_var_pie = create_pie_chart(pd.Series(minimum_variance_weights, index=tickers), "Minimum Variance")
     tangency_pie = create_pie_chart(pd.Series(tangency_weights, index=tickers), "Tangency Portfolio")
 
+    
+    # Calculate portfolio returns for each strategy
+    hrp_portfolio_returns = (portfolio_returns * hierarchical_risk_parity_weights).sum(axis=1)
+    min_cvar_portfolio_returns = (portfolio_returns * minimum_cvar_weights).sum(axis=1)
+    min_var_portfolio_returns = (portfolio_returns * minimum_variance_weights).sum(axis=1)
+    tangency_portfolio_returns = (portfolio_returns * tangency_weights).sum(axis=1)
+
+    # Calculate cumulative returns for each strategy
+    hrp_cumulative_returns = (hrp_portfolio_returns + 1).cumprod() - 1
+    min_cvar_cumulative_returns = (min_cvar_portfolio_returns + 1).cumprod() - 1
+    min_var_cumulative_returns = (min_var_portfolio_returns + 1).cumprod() - 1
+    tangency_cumulative_returns = (tangency_portfolio_returns + 1).cumprod() - 1
+
+    # Calculate annual returns for each strategy using geometric mean
+    hrp_annual_return = (1 + hrp_portfolio_returns).prod() ** (252 / len(hrp_portfolio_returns)) - 1
+    min_cvar_annual_return = (1 + min_cvar_portfolio_returns).prod() ** (252 / len(min_cvar_portfolio_returns)) - 1
+    min_var_annual_return = (1 + min_var_portfolio_returns).prod() ** (252 / len(min_var_portfolio_returns)) - 1
+    tangency_annual_return = (1 + tangency_portfolio_returns).prod() ** (252 / len(tangency_portfolio_returns)) - 1
+
     additional_stats = {
         'Cumulative Return': cumulative_return_value,
         'Hierarchical Risk Parity Portfolio Weights': hierarchical_risk_parity_weights,
+        'Hierarchical Risk Parity Portfolio Returns yr': hrp_annual_return.round(4),
         'Minimum CVaR Portfolio Weights': minimum_cvar_weights,
+        'Minimum CVaR Portfolio Returns yr': min_cvar_annual_return.round(4),
         'Minimum Variance Portfolio Weights': minimum_variance_weights,
-        'Tangency Portfolio Weights': tangency_weights
+        'Minimum Variance Portfolio Returns yr': min_var_annual_return.round(4),
+        'Tangency Portfolio Weights': tangency_weights,
+        'Tangency Portfolio Returns yr': tangency_annual_return.round(4)
     }
 
     return render_template('results.html', 
@@ -151,9 +174,16 @@ def results():
                            hrp_pie=hrp_pie, 
                            min_cvar_pie=min_cvar_pie,
                            min_var_pie=min_var_pie, 
-                           tangency_pie=tangency_pie
+                           tangency_pie=tangency_pie,
 
-                           )
+                           hrp_portfolio_returns=hrp_portfolio_returns.tolist(),
+                           hrp_cumulative_returns=hrp_cumulative_returns.tolist(),
+                           min_cvar_portfolio_returns=min_cvar_portfolio_returns.tolist(),
+                           min_cvar_cumulative_returns=min_cvar_cumulative_returns.tolist(),
+                           min_var_portfolio_returns=min_var_portfolio_returns.tolist(),
+                           min_var_cumulative_returns=min_var_cumulative_returns.tolist(),
+                           tangency_portfolio_returns=tangency_portfolio_returns.tolist(),
+                           tangency_cumulative_returns=tangency_cumulative_returns.tolist())
 
 
 if __name__ == '__main__':

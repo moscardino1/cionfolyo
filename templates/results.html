@@ -6,32 +6,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio Results</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- Include Plotly JS -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>Portfolio Results</h1>
-    
-    {% if portfolio_stats %}
-        <h2>Portfolio Statistics:</h2>
-        <ul>
-            {% for key, value in portfolio_stats.items() %}
-                <li>{{ key }}: {{ value }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
+    <div class="container">
+        <h1>Portfolio Results</h1>
 
-    <h2>Additional Portfolio Statistics:</h2>
-    <ul>
-        {% for key, value in additional_stats.items() %}
-            <li>{{ key }}: {{ value }}</li>
-        {% endfor %}
-    </ul>
-    <!-- <div id="portfolio-graph"></div> -->
-    <div id="portfolio-graph">{{ plot_json | safe }}</div>
-    <div id="hrp-pie"></div>
-    <div id="min-cvar-pie"></div>
-    <div id="min-var-pie"></div>
-    <div id="tangency-pie"></div>
+        {% if portfolio_stats %}
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h2>Portfolio Statistics</h2>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for key, value in portfolio_stats.items() %}
+                            <li class="list-group-item">{{ key }}: {{ value }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="card mb-3">
+            <div class="card-header">
+                <h2>Additional Portfolio Statistics</h2>
+            </div>
+            
+        </div>
+        <div class="tab-content">
+            <div class="mt-3">
+                <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Input Form</a>
+            </div>
+        <div class="chart-container mb-3">
+            <div id="portfolio-graph"></div>
+        </div>
+
+        <ul class="nav nav-tabs mb-3" id="chartsTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="hrp-tab" data-toggle="tab" href="#hrp" role="tab" aria-controls="hrp" aria-selected="true">Hierarchical Risk Parity</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="min-cvar-tab" data-toggle="tab" href="#min-cvar" role="tab" aria-controls="min-cvar" aria-selected="false">Minimum CVaR</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="min-var-tab" data-toggle="tab" href="#min-var" role="tab" aria-controls="min-var" aria-selected="false">Minimum Variance</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="tangency-tab" data-toggle="tab" href="#tangency" role="tab" aria-controls="tangency" aria-selected="false">Tangency Portfolio</a>
+            </li>
+        </ul>
+ 
+        <!-- results.html -->
+        <!-- ... (existing HTML code) ... -->
+        
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="hrp" role="tabpanel" aria-labelledby="hrp-tab">
+                <li class="list-group">Hierarchical Risk Parity Portfolio Weights: {{ additional_stats['Hierarchical Risk Parity Portfolio Weights'] }}</li>
+                <li class="list-group">Hierarchical Risk Parity Portfolio Returns yr: {{ additional_stats['Hierarchical Risk Parity Portfolio Returns yr'] }}</li>
+                <div id="hrp-pie"></div>
+  
+                <div id="hrp-portfolio-graph"></div>
+            </div>
+            <div class="tab-pane fade" id="min-cvar" role="tabpanel" aria-labelledby="min-cvar-tab">
+                <li class="list-group">Minimum CVaR Portfolio Weights: {{ additional_stats['Minimum CVaR Portfolio Weights'] }}</li>
+                <li class="list-group">Minimum CVaR Portfolio Returns yr: {{ additional_stats['Minimum CVaR Portfolio Returns yr'] }}</li>
+
+                <div id="min-cvar-pie"></div>
+                 <div id="min-cvar-portfolio-graph"></div>
+            </div>
+            <div class="tab-pane fade" id="min-var" role="tabpanel" aria-labelledby="min-var-tab">
+                <li class="list-group">Minimum Variance Portfolio Weights: {{ additional_stats['Minimum Variance Portfolio Weights'] }}</li>
+                <li class="list-group">Minimum Variance Portfolio Returns yr: {{ additional_stats['Minimum Variance Portfolio Returns yr'] }}</li>
+
+                <div id="min-var-pie"></div>
+                 <div id="min-var-portfolio-graph"></div>
+            </div>
+            <div class="tab-pane fade" id="tangency" role="tabpanel" aria-labelledby="tangency-tab">
+                <li class="list-group">Tangency Portfolio Weights: {{ additional_stats['Tangency Portfolio Weights'] }}</li>
+                <li class="list-group">Tangency Portfolio Returns yr: {{ additional_stats['Tangency Portfolio Returns yr'] }}</li>
+
+                <div id="tangency-pie"></div>
+                 <div id="tangency-portfolio-graph"></div>
+            </div>
+        </div>
+        </div>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // JavaScript code to generate Plotly graph
         var returnsData = {
@@ -52,21 +117,71 @@
         };
         // Add cumulative returns trace
         var cumulativeReturnsData = {
-        x: {{ portfolio_returns_dates | tojson }},
-        y: {{ cumulative_returns | tojson }},
-        type: 'scatter',
-        mode: 'lines',
-        name: 'Cumulative Returns'
-    };
-// Update Plotly plot with both traces
-Plotly.newPlot('portfolio-graph', [returnsData, cumulativeReturnsData], layout);
+            x: {{ portfolio_returns_dates | tojson }},
+            y: {{ cumulative_returns | tojson }},
+            type: 'scatter',
+            mode: 'lines',
+            name: 'Cumulative Returns'
+        };
+        // Update Plotly plot with both traces
+        Plotly.newPlot('portfolio-graph', [returnsData, cumulativeReturnsData], layout, {
+            responsive: true
+        });
 
-        
-        Plotly.newPlot('hrp-pie', JSON.parse('{{ hrp_pie | safe }}'));
-        Plotly.newPlot('min-cvar-pie', JSON.parse('{{ min_cvar_pie | safe }}'));
-        Plotly.newPlot('min-var-pie', JSON.parse('{{ min_var_pie | safe }}'));
-        Plotly.newPlot('tangency-pie', JSON.parse('{{ tangency_pie | safe }}'));
+        Plotly.newPlot('hrp-pie', JSON.parse('{{ hrp_pie | safe }}'), {
+            responsive: true
+        });
+        Plotly.newPlot('min-cvar-pie', JSON.parse('{{ min_cvar_pie | safe }}'), {
+            responsive: true
+        });
+        Plotly.newPlot('min-var-pie', JSON.parse('{{ min_var_pie | safe }}'), {
+            responsive: true
+        });
+        Plotly.newPlot('tangency-pie', JSON.parse('{{ tangency_pie | safe }}'), {
+            responsive: true
+        });
 
+
+        function createPortfolioChart(containerId, portfolioReturns, cumulativeReturns, portfolioName) {
+        var returnsData = {
+            x: {{ portfolio_returns_dates | tojson }},
+            y: portfolioReturns,
+            type: 'scatter',
+            mode: 'lines',
+            name: `${portfolioName} Returns`
+        };
+        var layout = {
+            title: `${portfolioName} Returns`,
+            xaxis: {
+                title: 'Date'
+            },
+            yaxis: {
+                title: 'Returns'
+            }
+        };
+        var cumulativeReturnsData = {
+            x: {{ portfolio_returns_dates | tojson }},
+            y: cumulativeReturns,
+            type: 'scatter',
+            mode: 'lines',
+            name: `${portfolioName} Cumulative Returns`
+        };
+        Plotly.newPlot(containerId, [returnsData, cumulativeReturnsData], layout, {
+            responsive: true
+        });
+    }
+
+    // Create the portfolio returns and cumulative returns chart for Hierarchical Risk Parity
+    createPortfolioChart('hrp-portfolio-graph', {{ hrp_portfolio_returns | tojson }}, {{ hrp_cumulative_returns | tojson }}, 'Hierarchical Risk Parity');
+
+    // Create the portfolio returns and cumulative returns chart for Minimum CVaR
+    createPortfolioChart('min-cvar-portfolio-graph', {{ min_cvar_portfolio_returns | tojson }}, {{ min_cvar_cumulative_returns | tojson }}, 'Minimum CVaR');
+
+    // Create the portfolio returns and cumulative returns chart for Minimum Variance
+    createPortfolioChart('min-var-portfolio-graph', {{ min_var_portfolio_returns | tojson }}, {{ min_var_cumulative_returns | tojson }}, 'Minimum Variance');
+
+    // Create the portfolio returns and cumulative returns chart for Tangency Portfolio
+    createPortfolioChart('tangency-portfolio-graph', {{ tangency_portfolio_returns | tojson }}, {{ tangency_cumulative_returns | tojson }}, 'Tangency Portfolio');
 
     </script>
 </body>

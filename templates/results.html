@@ -7,8 +7,10 @@
         <title>Portfolio Results</title>
         <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
         <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
+         <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
+         <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+
     </head>
 <body>
     
@@ -122,30 +124,31 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
  
     <script>
-        // Populate the table with data
-        var tableData = [];
-        
-        // Construct tableData array by iterating through portfolio_returns_dates
-        {% for i in range(portfolio_returns_dates | length) %}
-            tableData.push([
-                "{{ portfolio_returns_dates[i] }}",
-                {{ portfolio_returns_values[i] }},
-                {{ cumulative_returns[i] }}
-            ]);
-        {% endfor %}
+        $(document).ready(function() {
+            var tableData = [];
     
-        var tableBody = document.getElementById("portfolio-table").getElementsByTagName("tbody")[0];
+            // Construct tableData array by iterating through portfolio_returns_dates
+            {% for i in range(portfolio_returns_dates | length) %}
+                tableData.push([
+                    "{{ portfolio_returns_dates[i] }}",
+                    {{ portfolio_returns_values[i] }},
+                    {{ cumulative_returns[i] }}
+                ]);
+            {% endfor %}
     
-        for (var i = 0; i < tableData.length; i++) {
-            var row = tableBody.insertRow();
-            var dateCell = row.insertCell(0);
-            var returnsCell = row.insertCell(1);
-            var cumulativeReturnsCell = row.insertCell(2);
-    
-            dateCell.innerHTML = tableData[i][0];
-            returnsCell.innerHTML = tableData[i][1];
-            cumulativeReturnsCell.innerHTML = tableData[i][2];
-        }
+            $('#portfolio-table').DataTable({
+                data: tableData,
+                columns: [
+                    { title: "Date" },
+                    { title: "Portfolio Returns" },
+                    { title: "Cumulative Returns" }
+                ],
+                paging: true, // Enable pagination
+                pageLength: 10, // Number of rows to display per page
+                lengthMenu: [10, 25, 50, 75, 100], // Options for number of rows to display per page
+                responsive: true
+            });
+        });
     </script>
     
 

@@ -81,10 +81,10 @@ def results():
     tickers = []
     weights = []
 
-    for i in range(1, 5):
-        ticker = request.form.get(f'ticker{i}')
-        weight = request.form.get(f'weight{i}')
+    ticker_fields = request.form.getlist('ticker[]')
+    weight_fields = request.form.getlist('weight[]')
 
+    for ticker, weight in zip(ticker_fields, weight_fields):
         if ticker:
             tickers.append(ticker)
             if weight:
@@ -97,6 +97,7 @@ def results():
     if not tickers:
         error_message = "Please enter at least one ticker symbol."
         return render_template('results.html', error_message=error_message)
+
 
     start_date = pd.Timestamp.now() - pd.DateOffset(years=years)
     end_date = pd.Timestamp.now()

@@ -42,6 +42,7 @@ parso==0.8.4
 peewee==3.17.3
 pexpect==4.9.0
 pillow==10.3.0
+plotly==5.21.0
 portfolio-backtest==0.3.0
 prompt-toolkit==3.0.43
 ptyprocess==0.7.0
@@ -63,6 +64,7 @@ six==1.16.0
 soupsieve==2.5
 stack-data==0.6.3
 tabulate==0.9.0
+tenacity==8.2.3
 threadpoolctl==3.4.0
 traitlets==5.14.3
 typing_extensions==4.11.0

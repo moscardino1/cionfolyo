@@ -28,7 +28,7 @@
                             <div class="form-group col-md-3">
                                 <label for="ticker1">Ticker 1:</label>
                                 <input type="text" class="form-control ticker" name="ticker[]" value="AAPL" required>
-                                <input type="number" class="form-control weight" name="weight[]" min="0" max="1" step="0.25" placeholder="Weight" value="0.25" required>
+                                <input type="number" class="form-control weight" name="weight[]" min="0" max="1" step="0.01" placeholder="Weight" value="0.25" required>
                             </div>
                         </div>
                     </div>
@@ -39,6 +39,8 @@
                             <input type="number" class="form-control" id="years" name="years" min="1" max="10" value="1" required>
                         </div>
                     </div>
+                    <button type="button" class="btn btn-primary mb-2" id="redistribute-weights">Redistribute Weights Equally</button>
+
                     <button type="submit" class="btn btn-primary">Optimize</button>
                 </form>
             </div>
@@ -93,6 +95,36 @@
                 });
             });
         });
+
+        
     </script>
+    <script>
+        $(document).ready(function() {
+            // Function to redistribute weights equally
+            $('#redistribute-weights').click(function() {
+                var numTickers = $('.ticker').length;
+                var equalWeight = 1 / numTickers;
+                var roundedWeight = equalWeight.toFixed(2); // Round to 2 decimal places
+
+                $('.weight').val(roundedWeight);
+            });
+    
+            // Add ticker field dynamically
+            $('#add-ticker').click(function() {
+                // Your existing code for adding ticker fields
+            });
+    
+            // Remove ticker field dynamically
+            $(document).on('click', '.remove-ticker', function() {
+                // Your existing code for removing ticker fields
+            });
+    
+            // Form submission
+            $('#input-form').on('submit', function(event) {
+                // Your existing form submission code
+            });
+        });
+    </script>
+    
 </body>
 </html>

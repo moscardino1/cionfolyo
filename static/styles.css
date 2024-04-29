@@ -1,70 +1,69 @@
-/* styles.css */
 body {
-    font-family: 'Helvetica Neue', sans-serif; /* Sets the font family for the entire page */
-    background-color: #fafafa; /* Sets a light gray background color for the body */
-    margin: 0; /* Removes default margin from the body */
-    padding: 0; /* Removes default padding from the body */
+    font-family: 'Helvetica Neue', sans-serif;
+    background-color: #fafafa;
+    margin: 0;
+    padding: 0;
 }
 
 .container {
-    max-width: 1000px; /* Limits the maximum width of the container to 1000px */
-    margin: 0 auto; /* Centers the container horizontally */
-    padding: 20px; /* Adds 20px of padding around the container */
-    background-color: #fff; /* Sets a white background color for the container */
-    border-radius: 8px; /* Adds rounded corners to the container */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Adds a subtle box shadow to the container */
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-    color: #2c3e50; /* Sets a dark blue color for the h1 headings */
-    font-weight: 300; /* Sets a light font weight for the h1 headings */
+    color: #2c3e50;
+    font-weight: 300;
 }
 
 form {
-    margin-bottom: 20px; /* Adds 20px of margin at the bottom of forms */
+    margin-bottom: 20px;
 }
 
 label {
-    display: block; /* Displays labels as block elements */
-    margin-bottom: 5px; /* Adds 5px of margin at the bottom of labels */
-    color: #7f8c8d; /* Sets a grayish color for labels */
-    font-weight: 500; /* Sets a medium font weight for labels */
+    display: block;
+    margin-bottom: 5px;
+    color: #7f8c8d;
+    font-weight: 500;
 }
 
 input[type="text"],
 input[type="number"] {
-    width: calc(50% - 10px); /* Sets the width of text and number inputs to 50% minus 10px */
-    margin-bottom: 10px; /* Adds 10px of margin at the bottom of text and number inputs */
-    padding: 8px; /* Adds 8px of padding around text and number inputs */
-    border: 1px solid #bdc3c7; /* Sets a grayish border for text and number inputs */
-    border-radius: 4px; /* Adds rounded corners to text and number inputs */
-    font-size: 0.9em; /* Sets a slightly smaller font size for text and number inputs */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Adds a subtle box shadow to text and number inputs */
-    transition: box-shadow 0.3s ease; /* Adds a smooth transition effect for the box shadow */
+    width: calc(50% - 10px);
+    margin-bottom: 10px;
+    padding: 8px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 0.9em;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
 }
 
 input[type="text"]:focus,
 input[type="number"]:focus {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Increases the box shadow on focus */
-    outline: none; /* Removes the default outline on focus */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    outline: none;
 }
 
 input[type="submit"] {
-    padding: 10px 20px; /* Adds 10px of vertical padding and 20px of horizontal padding to submit buttons */
-    background-color: #3498db; /* Sets a blue background color for submit buttons */
-    color: #fff; /* Sets the text color to white for submit buttons */
-    border: none; /* Removes the default border for submit buttons */
-    border-radius: 4px; /* Adds rounded corners to submit buttons */
-    cursor: pointer; /* Changes the cursor to a pointer on hover over submit buttons */
-    font-size: 0.9em; /* Sets a slightly smaller font size for submit buttons */
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
 }
 
 input[type="submit"]:hover {
-    background-color: #2980b9; /* Changes the background color of submit buttons on hover */
+    background-color: #2980b9;
 }
 
 p {
-    color: #2c3e50; /* Sets a dark blue color for paragraphs */
+    color: #2c3e50;
 }
 
 /* Pie Chart and Graph Styling */
@@ -72,34 +71,26 @@ p {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
-    gap: 20px; /* Add spacing between charts */
+    gap: 20px;
 }
 
 .chart-wrapper {
-    flex: 1 0 45%; /* Allow charts to grow and shrink while maintaining a base width of 45% */
-}
-#portfolio-graph {
-    width: 100%; /* Sets the width of the portfolio graph to 100% of its parent container */
-    height: 400px; /* Sets a fixed height of 400px for the portfolio graph */
+    flex: 1 0 45%;
 }
 
 .chart-container {
-    height: 400px; /* Or use a responsive unit like vh */
+    height: auto;
 }
+
 #portfolio-graph {
-    width: 100%; /* Sets the width of the portfolio graph to 100% of its parent container */
-    height: 100%; /* Sets the height of the portfolio graph to 100% of its parent container */
+    width: auto;
+    height: auto;
 }
-
-.tab-content {
-    margin-top: 20px; /* Adds 20px of margin at the top of the tab content */
+#portfolio-table {
+    width: auto !important; /* Set width to auto to allow the table to adjust based on its content */
 }
-
-.tab-content .tab-pane {
-    height: fit-content; /* Sets a fixed height of 400px for each tab pane */
+.plot-container.plotly .svg-container {
+    width: 100% !important; /* Set width to 100% */
+    max-width: 100%; /* Set max-width to 100% to prevent it from exceeding the container's width */
+    margin: 0 auto; /* Center the element horizontally */
 }
-
-.pie-graph {
-    display: flex; /* Displays the charts container as a flex container */
-    flex-wrap: wrap; /* Allows the charts to wrap to the next line if necessary */
-    justify-content: space-around; /* Distributes the charts evenly within the container */}

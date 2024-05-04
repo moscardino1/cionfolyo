@@ -3,6 +3,7 @@
 This application allows users to optimize their investment portfolios using various strategies and visualize the results. It's built with Python, Flask, and utilizes libraries like yfinance, pandas, plotly, and scipy.
 
 **Deployed App:** [https://cionfolyo.onrender.com]
+![cionfolyo-ezgif com-video-to-gif-converter](https://github.com/moscardino1/cionfolyo/assets/9267948/2b7f0923-04ac-4b5d-93d9-f482c5edaed4)
 
 ## Features
 
